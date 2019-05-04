@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+    <GridLayout
+            android:columnCount="6"
+            android:rowCount="5"
+            android:id="@+id/stage_select_gridLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+    </GridLayout>
+    <Button
+            android:id="@+id/back_stage_select_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+</android.support.constraint.ConstraintLayout>
