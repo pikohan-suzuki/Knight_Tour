@@ -10,15 +10,15 @@ import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
 
-    var next_stage = 0
+    var nextStage = 0
     lateinit var stageTextVew: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        next_stage = readFile("next_stage").toInt()
+        nextStage = readFile("nextStage").toInt()
         stageTextVew = findViewById(R.id.stage_id_front_textView)
-        stageTextVew.text = getString(R.string.stage_id_front, next_stage)
+        stageTextVew.text = getString(R.string.stage_id_front, nextStage)
 
         val privacyPolicyTextView = findViewById<TextView>(R.id.privacy_policy_textView)
         privacyPolicyTextView.text= Html.fromHtml("<a href=\"https://pikohan-niwatori.amebaownd.com/posts/6171216\">PrivacyPolicy</a>")
@@ -42,15 +42,15 @@ class MainActivity : AppCompatActivity() {
         val startContinuationButton = findViewById<Button>(R.id.from_continuation_button)
         startContinuationButton.setOnClickListener {
             val intent = Intent(this, GameActivity::class.java)
-            intent.putExtra("stage_id", next_stage)
+            intent.putExtra("stage_id", nextStage)
             startActivity(intent)
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         if (intent!=null && requestCode == 101 && resultCode == Activity.RESULT_OK) {
-            next_stage = intent.getIntExtra("stage_id", 1)
-            stageTextVew.text = getString(R.string.stage_id_front, next_stage)
+            nextStage = intent.getIntExtra("stage_id", 1)
+            stageTextVew.text = getString(R.string.stage_id_front, nextStage)
         }
     }
 
