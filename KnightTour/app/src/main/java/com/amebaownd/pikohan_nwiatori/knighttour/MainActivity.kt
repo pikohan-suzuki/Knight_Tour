@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        nextStage = readFile("nextStage").toInt()
+        nextStage = readFile(this,"nextStage")?.toInt() ?: 1
         stageTextVew = findViewById(R.id.stage_id_front_textView)
         stageTextVew.text = getString(R.string.stage_id_front, nextStage)
 
