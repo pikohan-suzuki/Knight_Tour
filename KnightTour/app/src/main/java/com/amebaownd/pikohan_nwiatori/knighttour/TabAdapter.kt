@@ -12,7 +12,7 @@ import android.widget.TextView
 class TabAdapter(fm: FragmentManager, private val context: Context) : FragmentStatePagerAdapter(fm) {
 
     private val inflater = LayoutInflater.from(context)
-    private val title = arrayOf<String>("1", "人気の記事")
+    private val title = arrayOf<String>("1", "2")
     override fun getItem(position: Int): Fragment? {
         when(position){
             0->
