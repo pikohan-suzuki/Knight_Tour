@@ -39,6 +39,12 @@ class DialogManager(){
                 dialog.stageId=stageId
                 dialog.show(fragmentManager,"new_record")
             }
+            //congratulation
+            205->{
+                val dialog=CongratulationDialog()
+                dialog.show(fragmentManager,"congratulation")
+            }
+
         }
     }
 }
