@@ -102,7 +102,7 @@ class GameActivity : AppCompatActivity() {
 
     private fun backToPreviousRange(): Range {
         if (rangeStack.isEmpty() && currentRange!=Range(-1,-1)) {
-            setUnCheckedImageResource()
+//            setUnCheckedImageResource()
             return Range(-1, -1)
         }else {
             return rangeStack.pop()
@@ -154,5 +154,9 @@ class GameActivity : AppCompatActivity() {
     }
     private fun setUnCheckedImageResource(view:View){
 //        view.setBackgroundResource(R.drawable.checked_game_grid_background)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
+        writeFile(this,"nextStage",stage_id.toString())
     }
 }
