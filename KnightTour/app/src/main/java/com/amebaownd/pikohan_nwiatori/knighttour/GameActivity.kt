@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.Chronometer
@@ -28,9 +29,13 @@ class GameActivity : AppCompatActivity() {
     var cTime = 0
 
     lateinit var db: AppDatabase
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
+
+        val intent = Intent()
+        stage_id=intent.getIntExtra("stage_id",1)
 
         db = Room.databaseBuilder(this, AppDatabase::class.java, "database").build()
         createGameScreen()
@@ -39,7 +44,6 @@ class GameActivity : AppCompatActivity() {
         findViewById<Button>(R.id.back_to_previous_range_button).setOnClickListener {
             currentRange = backToPreviousRange()
         }
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
