@@ -1,6 +1,7 @@
 package com.amebaownd.pikohan_nwiatori.knighttour
 
 import android.app.Activity
+import android.arch.persistence.room.Room
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -8,16 +9,15 @@ import android.text.Html
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
-import java.io.BufferedReader
-import java.io.File
-import java.io.FileReader
 import java.io.InputStreamReader
+import kotlin.concurrent.thread
 
 
 class MainActivity : AppCompatActivity() {
 
-    var nextStage = 0
+    private var nextStage = 0
     lateinit var stageTextVew: TextView
+    lateinit var db: AppDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -52,8 +52,23 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("stage_id", nextStage)
             startActivity(intent)
         }
-
-        readCsv()
+        val db = Room.databaseBuilder(this, AppDatabase::class.java, "database").build()
+        val data1 = readStageCsv()
+        thread {
+            try {
+                db.stageDao().insertAll(*data1.toTypedArray())
+            } catch (e: android.database.sqlite.SQLiteConstraintException) {
+                Log.d("aaaaa", e.toString())
+            }
+        }
+        val data2 = readStageInfoCsv()
+        thread {
+            try {
+                db.stageInfoDao().insertAll(*data2.toTypedArray())
+            } catch (e: android.database.sqlite.SQLiteConstraintException) {
+                Log.d("aaaaa", e.toString())
+            }
+        }
 
     }
 
@@ -64,21 +79,38 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun readCsv() :List<Stage>{
+    private fun readStageCsv(): List<Stage> {
         val inputStream = resources.assets.open("stage.csv")
         val inputStreamReader = InputStreamReader(inputStream)
         val results = mutableListOf<Stage>()
         inputStreamReader.use {
-            it.readLines().forEach{
+            it.readLines().forEach {
                 val str = it!!.split(",")
                 val result = Stage().apply {
-                    this.stageId=str[0].toInt()
-                    this.row=str[1].toInt()
-                    this.column=str[2].toInt()
-                    this.sTime=str[3].toInt()
-                    this.aTime=str[4].toInt()
-                    this.sTime=str[5].toInt()
-                    this.aTime=str[6].toInt()
+                    this.stageId = str[0].toInt()
+                    this.row = str[1].toInt()
+                    this.column = str[2].toInt()
+                    this.sTime = str[3].toInt()
+                    this.aTime = str[4].toInt()
+                    this.sTime = str[5].toInt()
+                    this.aTime = str[6].toInt()
+                }
+                results.add(result)
+            }
+        }
+        return results.toList()
+    }
+    private fun readStageInfoCsv(): List<StageInfo> {
+        val inputStream = resources.assets.open("stage_info.csv")
+        val inputStreamReader = InputStreamReader(inputStream)
+        val results = mutableListOf<StageInfo>()
+        inputStreamReader.use {
+            it.readLines().forEach {
+                val str = it!!.split(",")
+                val result = StageInfo().apply {
+                    this.stageId = str[0].toInt()
+                    this.row = str[1].toInt()
+                    this.column = str[2].toInt()
                 }
                 results.add(result)
             }
