@@ -60,6 +60,7 @@ class GameActivity : AppCompatActivity() {
     private fun createGameScreen() {
         val gridLayout = findViewById<GridLayout>(R.id.game_gridLayout)
         gridLayout.removeAllViews()
+        //ステージ情報を取得
         db.stageDao().getByStageId(stage_id).observe(this, Observer<Stage> {
             if (it != null) {
                 gridLayout.rowCount = it.row
@@ -69,27 +70,40 @@ class GameActivity : AppCompatActivity() {
                 bTime = it.bTime
                 cTime = it.cTime
             }
+            //セルを正方形に
+            if(gridLayout.width!=0 && gridLayout.height!=0){
+                val params = gridLayout.layoutParams
+                if(gridLayout.width> gridLayout.height){
+                    params.width=gridLayout.height
+                }else{
+                    params.height=gridLayout.width
+                }
+                gridLayout.layoutParams=params
+            }
+            //セル情報の取得・inflate・bind
+            db.stageInfoDao().getByStageId(stage_id).observe(this, Observer<List<StageInfo>> {cells->
+                if (cells != null) {
+                    numberOfRange = cells.size
+                    cells.forEach {cell->
+                        val params = GridLayout.LayoutParams()
+                        params.rowSpec = GridLayout.spec(cell.row,GridLayout.FILL,1f)
+                        params.columnSpec = GridLayout.spec(cell.column,GridLayout.FILL,1f)
+                        val view = layoutInflater.inflate(R.layout.game_grid_item, null)
+                        view.setOnClickListener(gridItemClickOnListener(cell.row, cell.column))
+                        view.layoutParams = params
+                        view.background= if((cell.row+cell.column)%2==0) getDrawable(R.drawable.board_cell_white) else getDrawable(R.drawable.board_cell_black)
+                        gridLayout.addView(view)
+                    }
+                }
         })
+            //ステージレコードを取得
         db.recordDao().getByStageId(stage_id).observe(this, Observer<Record> {
             if (it != null) {
                 bestRank = it.rank
                 bestTime = Time(it.time.toLong())
             }
         })
-        db.stageInfoDao().getByStageId(stage_id).observe(this, Observer<List<StageInfo>> {
-            if (it != null) {
-                numberOfRange = it.size
-                it.forEach {
-                    val params = GridLayout.LayoutParams()
-                    params.rowSpec = GridLayout.spec(it.row)
-                    params.rowSpec = GridLayout.spec(it.column)
-                    val view = layoutInflater.inflate(R.layout.game_grid_item, null)
-                    view.setOnClickListener(gridItemClickOnListener(it.row, it.column))
-                    view.layoutParams = params
-                    view.background= if((it.row+it.column)%2==0) getDrawable(R.drawable.board_cell_white) else getDrawable(R.drawable.board_cell_black)
-                    gridLayout.addView(view)
-                }
-            }
+
         })
     }
 
