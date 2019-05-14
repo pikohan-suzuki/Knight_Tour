@@ -81,6 +81,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+    //ステージ情報の読み込み
     private fun readStageCsv(): List<Stage> {
         val inputStream = resources.assets.open("stage.csv")
         val inputStreamReader = InputStreamReader(inputStream)
@@ -102,6 +104,8 @@ class MainActivity : AppCompatActivity() {
         }
         return results.toList()
     }
+
+    //ステージの盤面情報の読み込み
     private fun readStageInfoCsv(): List<StageInfo> {
         val inputStream = resources.assets.open("stage_info.csv")
         val inputStreamReader = InputStreamReader(inputStream)
