@@ -9,6 +9,8 @@ import android.text.Html
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import com.amebaownd.pikohan_nwiatori.knighttour.Data.Stage
+import com.amebaownd.pikohan_nwiatori.knighttour.Data.StageInfo
 import java.io.InputStreamReader
 import kotlin.concurrent.thread
 

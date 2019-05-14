@@ -1,4 +1,4 @@
-package com.amebaownd.pikohan_nwiatori.knighttour
+package com.amebaownd.pikohan_nwiatori.knighttour.Dialog
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -8,6 +8,8 @@ import android.support.v4.app.DialogFragment
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import com.amebaownd.pikohan_nwiatori.knighttour.GameActivity
+import com.amebaownd.pikohan_nwiatori.knighttour.R
 import java.sql.Time
 import java.text.SimpleDateFormat
 
@@ -24,7 +26,7 @@ class ConfirmStartDialog(): DialogFragment() {
         val startGameButton = alertDialog.findViewById<Button>(R.id.start_confirm_start_button)
         startGameButton.setOnClickListener{
             this.dismiss()
-            val intent = Intent(this.context,GameActivity::class.java)
+            val intent = Intent(this.context, GameActivity::class.java)
             intent.putExtra("stage_id",stageId)
             startActivity(intent)
         }

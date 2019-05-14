@@ -1,4 +1,4 @@
-package com.amebaownd.pikohan_nwiatori.knighttour
+package com.amebaownd.pikohan_nwiatori.knighttour.Data
 
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.Dao
@@ -15,7 +15,7 @@ interface StageDao{
     fun getByStageId(stageId:Int):LiveData<Stage>
 
     @Insert
-    fun insertAll(vararg stage:Stage)
+    fun insertAll(vararg stage: Stage)
 
 
 }

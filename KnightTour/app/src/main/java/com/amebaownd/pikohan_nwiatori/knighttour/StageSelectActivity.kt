@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.GridLayout
 import android.widget.TextView
+import com.amebaownd.pikohan_nwiatori.knighttour.Data.Record
 import java.sql.Time
 
 class StageSelectActivity : AppCompatActivity() {
@@ -40,6 +41,7 @@ class StageSelectActivity : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
+
     }
 
     private fun gridItemClickListener(stageId: Int, rank: String, time: Time): View.OnClickListener {

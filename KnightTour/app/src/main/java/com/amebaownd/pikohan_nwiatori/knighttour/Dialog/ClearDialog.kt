@@ -1,4 +1,4 @@
-package com.amebaownd.pikohan_nwiatori.knighttour
+package com.amebaownd.pikohan_nwiatori.knighttour.Dialog
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -8,8 +8,9 @@ import android.support.v4.app.DialogFragment
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import com.amebaownd.pikohan_nwiatori.knighttour.R
+import com.amebaownd.pikohan_nwiatori.knighttour.StageSelectActivity
 import java.sql.Time
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 
 class ClearDialog(): DialogFragment() {
@@ -25,7 +26,7 @@ class ClearDialog(): DialogFragment() {
         val backStageSelectButton = alertDialog.findViewById<Button>(R.id.back_stage_select_button)
         backStageSelectButton.setOnClickListener{
             this.dismiss()
-            val intent = Intent(this.context,StageSelectActivity::class.java)
+            val intent = Intent(this.context, StageSelectActivity::class.java)
             startActivity(intent)
         }
         val rankTextView =alertDialog.findViewById<TextView>(R.id.rank_clear_textView)

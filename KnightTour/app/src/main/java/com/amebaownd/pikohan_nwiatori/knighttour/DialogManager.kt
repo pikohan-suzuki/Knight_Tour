@@ -1,6 +1,7 @@
 package com.amebaownd.pikohan_nwiatori.knighttour
 
 import android.support.v4.app.FragmentManager
+import com.amebaownd.pikohan_nwiatori.knighttour.Dialog.*
 import java.sql.Time
 
 class DialogManager(){
@@ -17,7 +18,7 @@ class DialogManager(){
             }
             //confirm_start
             202->{
-                val dialog=ConfirmStartDialog()
+                val dialog= ConfirmStartDialog()
                 dialog.rank=rank
                 dialog.stageId=stageId
                 dialog.time=time
@@ -25,7 +26,7 @@ class DialogManager(){
             }
             //clear
             203->{
-                val dialog=ClearDialog()
+                val dialog= ClearDialog()
                 dialog.rank=rank
                 dialog.time=time
                 dialog.stageId=stageId
@@ -33,7 +34,7 @@ class DialogManager(){
             }
             //new_record
             204->{
-                val dialog=NewRecordDialog()
+                val dialog= NewRecordDialog()
                 dialog.rank=rank
                 dialog.time=time
                 dialog.stageId=stageId
@@ -41,7 +42,7 @@ class DialogManager(){
             }
             //congratulation
             205->{
-                val dialog=CongratulationDialog()
+                val dialog= CongratulationDialog()
                 dialog.show(fragmentManager,"congratulation")
             }
 

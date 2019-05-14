@@ -1,18 +1,17 @@
-package com.amebaownd.pikohan_nwiatori.knighttour
+package com.amebaownd.pikohan_nwiatori.knighttour.Dialog
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import java.security.AccessControlContext
+import com.amebaownd.pikohan_nwiatori.knighttour.R
+import com.amebaownd.pikohan_nwiatori.knighttour.StageSelectActivity
 import java.sql.Time
 import java.text.SimpleDateFormat
-import java.util.logging.SimpleFormatter
 
 class PauseDialog():DialogFragment() {
     var stageId:Int=1
@@ -27,7 +26,7 @@ class PauseDialog():DialogFragment() {
         val goToStageSelectButton = alertDialog.findViewById<Button>(R.id.goto_select_pause_button)
         goToStageSelectButton.setOnClickListener{
             this.dismiss()
-            val intent = Intent(this.context,StageSelectActivity::class.java)
+            val intent = Intent(this.context, StageSelectActivity::class.java)
             startActivity(intent)
         }
 

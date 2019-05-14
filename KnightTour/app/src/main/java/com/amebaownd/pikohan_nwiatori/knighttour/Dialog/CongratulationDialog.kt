@@ -1,4 +1,4 @@
-package com.amebaownd.pikohan_nwiatori.knighttour
+package com.amebaownd.pikohan_nwiatori.knighttour.Dialog
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.view.View
 import android.widget.Button
+import com.amebaownd.pikohan_nwiatori.knighttour.MainActivity
+import com.amebaownd.pikohan_nwiatori.knighttour.R
 
 class CongratulationDialog: DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -14,7 +16,7 @@ class CongratulationDialog: DialogFragment() {
         val okButton = alertDialog.findViewById<Button>(R.id.ok_congratulation_button)
         okButton.setOnClickListener{
             this.dismiss()
-            val intent = Intent(this.context,MainActivity::class.java)
+            val intent = Intent(this.context, MainActivity::class.java)
             startActivity(intent)
         }
 

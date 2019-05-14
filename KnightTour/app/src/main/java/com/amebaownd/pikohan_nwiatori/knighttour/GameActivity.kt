@@ -7,11 +7,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.Chronometer
 import android.widget.GridLayout
+import com.amebaownd.pikohan_nwiatori.knighttour.Data.Record
+import com.amebaownd.pikohan_nwiatori.knighttour.Data.Stage
+import com.amebaownd.pikohan_nwiatori.knighttour.Data.StageInfo
 import java.lang.Math.abs
 import java.sql.Time
 
@@ -84,11 +86,11 @@ class GameActivity : AppCompatActivity() {
                     val view = layoutInflater.inflate(R.layout.game_grid_item, null)
                     view.setOnClickListener(gridItemClickOnListener(it.row, it.column))
                     view.layoutParams = params
+                    view.background= if((it.row+it.column)%2==0) getDrawable(R.drawable.board_cell_white) else getDrawable(R.drawable.board_cell_black)
                     gridLayout.addView(view)
                 }
             }
         })
-
     }
 
     private fun clear(rank: String, time: Time) {

@@ -1,4 +1,4 @@
-package com.amebaownd.pikohan_nwiatori.knighttour
+package com.amebaownd.pikohan_nwiatori.knighttour.Data
 
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
