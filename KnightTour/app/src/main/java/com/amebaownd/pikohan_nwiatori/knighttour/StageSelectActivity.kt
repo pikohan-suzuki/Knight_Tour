@@ -22,17 +22,21 @@ class StageSelectActivity : AppCompatActivity() {
         val gridLayout = findViewById<GridLayout>(R.id.stage_select_gridLayout)
         db.recordDao().getAllOrderByStageId().observe(this, Observer<List<Record>> {
             if (it != null) {
+                var count=0
                 for (i in 0 until it.size) {
                     val item = layoutInflater.inflate(R.layout.stage_select_grid_item, null)
+                    item.background=getDrawable(R.drawable.board_cell_white)
                     item.findViewById<TextView>(R.id.stage_id_stage_select_grid_item).text = (i + 1).toString()
                     item.findViewById<TextView>(R.id.rank_stage_select_grid_item).text=it[i].rank
                     item.setOnClickListener(gridItemClickListener(i+1,it[i].rank,Time(it[i].time.toLong())))
+                    if(it[i].rank!="")  count+=1
                     val params = GridLayout.LayoutParams()
-                    params.rowSpec = GridLayout.spec(i / 6)
-                    params.columnSpec = GridLayout.spec(i % 6)
+                    params.rowSpec = GridLayout.spec(i / 6,GridLayout.FILL,1f)
+                    params.columnSpec = GridLayout.spec(i % 6,GridLayout.FILL,1f)
                     item.layoutParams = params
                     gridLayout.addView(item)
                 }
+                findViewById<TextView>(R.id.stage_select_cleared_textView).text=getString(R.string.clear_percent,count,it.size)
             }
         })
 
