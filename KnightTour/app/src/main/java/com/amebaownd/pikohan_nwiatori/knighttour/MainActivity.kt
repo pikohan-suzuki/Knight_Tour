@@ -9,6 +9,7 @@ import android.text.Html
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import com.amebaownd.pikohan_nwiatori.knighttour.Data.Record
 import com.amebaownd.pikohan_nwiatori.knighttour.Data.Stage
 import com.amebaownd.pikohan_nwiatori.knighttour.Data.StageInfo
 import java.io.InputStreamReader
@@ -60,7 +61,7 @@ class MainActivity : AppCompatActivity() {
             try {
                 db.stageDao().insertAll(*data1.toTypedArray())
             } catch (e: android.database.sqlite.SQLiteConstraintException) {
-                Log.d("aaaaa", e.toString())
+                Log.d("stage insert exception", e.toString())
             }
         }
         val data2 = readStageInfoCsv()
@@ -68,7 +69,15 @@ class MainActivity : AppCompatActivity() {
             try {
                 db.stageInfoDao().insertAll(*data2.toTypedArray())
             } catch (e: android.database.sqlite.SQLiteConstraintException) {
-                Log.d("aaaaa", e.toString())
+                Log.d("stage info insert exception", e.toString())
+            }
+        }
+        val data3 = readRecordCsv()
+        thread{
+            try {
+                db.recordDao().insertAll(*data3.toTypedArray())
+            } catch (e: android.database.sqlite.SQLiteConstraintException) {
+                Log.d("record insert exception", e.toString())
             }
         }
 
@@ -117,6 +126,24 @@ class MainActivity : AppCompatActivity() {
                     this.stageId = str[0].toInt()
                     this.row = str[1].toInt()
                     this.column = str[2].toInt()
+                }
+                results.add(result)
+            }
+        }
+        return results.toList()
+    }
+
+    private fun readRecordCsv(): List<Record> {
+        val inputStream = resources.assets.open("record.csv")
+        val inputStreamReader = InputStreamReader(inputStream)
+        val results = mutableListOf<Record>()
+        inputStreamReader.use {
+            it.readLines().forEach {
+                val str = it!!.split(",")
+                val result = Record().apply {
+                    this.stageId = str[0].toInt()
+                    this.time = str[1].toInt()
+                    this.rank = str[2].toString()
                 }
                 results.add(result)
             }
