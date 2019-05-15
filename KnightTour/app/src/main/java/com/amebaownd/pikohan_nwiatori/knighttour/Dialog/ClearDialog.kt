@@ -1,7 +1,9 @@
 package com.amebaownd.pikohan_nwiatori.knighttour.Dialog
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
+import android.app.PendingIntent
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
@@ -21,9 +23,16 @@ class ClearDialog(): DialogFragment() {
         val alertDialog : View = activity!!.layoutInflater.inflate(R.layout.dialog_clear,null)
         val nextStageButton = alertDialog.findViewById<Button>(R.id.next_stage_button)
         nextStageButton.setOnClickListener{
+            val intent= Intent()
+            val pendingIntent =activity!!.createPendingResult(targetRequestCode,intent, PendingIntent.FLAG_ONE_SHOT)
+            try{
+                pendingIntent.send(Activity.RESULT_OK)
+            }catch (ex: PendingIntent.CanceledException){
+                ex.printStackTrace()
+            }
             this.dismiss()
         }
-        val backStageSelectButton = alertDialog.findViewById<Button>(R.id.back_stage_select_button)
+        val backStageSelectButton = alertDialog.findViewById<Button>(R.id.goto_select_clear_button)
         backStageSelectButton.setOnClickListener{
             this.dismiss()
             val intent = Intent(this.context, StageSelectActivity::class.java)

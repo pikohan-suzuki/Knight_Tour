@@ -14,6 +14,7 @@ class DialogManager(){
                 dialog.stageId=stageId
                 dialog.rank=rank
                 dialog.time=time
+                dialog.setTargetFragment(null,id)
                 dialog.show(fragmentManager,"pause")
             }
             //confirm_start
@@ -22,6 +23,7 @@ class DialogManager(){
                 dialog.rank=rank
                 dialog.stageId=stageId
                 dialog.time=time
+                dialog.setTargetFragment(null,id)
                 dialog.show(fragmentManager,"confirm_start")
             }
             //clear
@@ -30,6 +32,7 @@ class DialogManager(){
                 dialog.rank=rank
                 dialog.time=time
                 dialog.stageId=stageId
+                dialog.setTargetFragment(null,id)
                 dialog.show(fragmentManager,"clear")
             }
             //new_record
@@ -38,11 +41,13 @@ class DialogManager(){
                 dialog.rank=rank
                 dialog.time=time
                 dialog.stageId=stageId
+                dialog.setTargetFragment(null,id)
                 dialog.show(fragmentManager,"new_record")
             }
             //congratulation
             205->{
                 val dialog= CongratulationDialog()
+                dialog.setTargetFragment(null,id)
                 dialog.show(fragmentManager,"congratulation")
             }
 
