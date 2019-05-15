@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.Chronometer
 import android.widget.GridLayout
+import android.widget.ImageView
 import com.amebaownd.pikohan_nwiatori.knighttour.Data.Record
 import com.amebaownd.pikohan_nwiatori.knighttour.Data.Stage
 import com.amebaownd.pikohan_nwiatori.knighttour.Data.StageInfo
@@ -30,6 +31,7 @@ class GameActivity : AppCompatActivity() {
     var bTime = 0
     var cTime = 0
 
+    lateinit var gridLayout: GridLayout
     lateinit var db: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,9 +39,11 @@ class GameActivity : AppCompatActivity() {
         setContentView(R.layout.activity_game)
 
         val intent = Intent()
-        stage_id=intent.getIntExtra("stage_id",1)
+        stage_id = intent.getIntExtra("stage_id", 1)
 
         db = Room.databaseBuilder(this, AppDatabase::class.java, "database").build()
+
+        gridLayout = findViewById<GridLayout>(R.id.game_gridLayout)
         createGameScreen()
 
         findViewById<Button>(R.id.pause_game).setOnClickListener(pauseButtonClickListener)
@@ -49,7 +53,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        if (requestCode == 202 && resultCode == Activity.RESULT_OK) {
+        if (requestCode == 203 && resultCode == Activity.RESULT_OK) {
             if (stage_id < NUMBER_OF_STAGES - 1) {
                 stage_id += 1
                 createGameScreen()
@@ -58,8 +62,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun createGameScreen() {
-        val gridLayout = findViewById<GridLayout>(R.id.game_gridLayout)
-        gridLayout.removeAllViews()
+        resetBoards()
         //ステージ情報を取得
         db.stageDao().getByStageId(stage_id).observe(this, Observer<Stage> {
             if (it != null) {
@@ -71,38 +74,67 @@ class GameActivity : AppCompatActivity() {
                 cTime = it.cTime
             }
             //セルを正方形に
-            if(gridLayout.width!=0 && gridLayout.height!=0){
+            if (gridLayout.width != 0 && gridLayout.height != 0) {
                 val params = gridLayout.layoutParams
-                if(gridLayout.width> gridLayout.height){
-                    params.width=gridLayout.height
-                }else{
-                    params.height=gridLayout.width
+                if (gridLayout.width > gridLayout.height) {
+                    params.width = gridLayout.height
+                } else {
+                    params.height = gridLayout.width
                 }
-                gridLayout.layoutParams=params
+                gridLayout.layoutParams = params
             }
             //セル情報の取得・inflate・bind
-            db.stageInfoDao().getByStageId(stage_id).observe(this, Observer<List<StageInfo>> {cells->
+            var row = 0
+            var column = 0
+            db.stageInfoDao().getByStageId(stage_id).observe(this, Observer<List<StageInfo>> { cells ->
                 if (cells != null) {
                     numberOfRange = cells.size
-                    cells.forEach {cell->
+                    cells.forEach { cell ->
+                        while (row != cell.row || column != cell.column) {
+                            val params = GridLayout.LayoutParams()
+                            params.rowSpec = GridLayout.spec(row, GridLayout.FILL, 1f)
+                            params.columnSpec = GridLayout.spec(column, GridLayout.FILL, 1f)
+                            val view = layoutInflater.inflate(R.layout.game_grid_item, null)
+                            view.layoutParams = params
+                            view.background = getDrawable(R.drawable.blank_cell2)
+                            gridLayout.addView(view)
+                            row += (column + 1) / gridLayout.columnCount
+                            column = (column + 1) % gridLayout.columnCount
+                        }
                         val params = GridLayout.LayoutParams()
-                        params.rowSpec = GridLayout.spec(cell.row,GridLayout.FILL,1f)
-                        params.columnSpec = GridLayout.spec(cell.column,GridLayout.FILL,1f)
+                        params.rowSpec = GridLayout.spec(cell.row, GridLayout.FILL, 1f)
+                        params.columnSpec = GridLayout.spec(cell.column, GridLayout.FILL, 1f)
                         val view = layoutInflater.inflate(R.layout.game_grid_item, null)
                         view.setOnClickListener(gridItemClickOnListener(cell.row, cell.column))
                         view.layoutParams = params
-                        view.background= if((cell.row+cell.column)%2==0) getDrawable(R.drawable.board_cell_white) else getDrawable(R.drawable.board_cell_black)
+                        view.background =
+                            if ((cell.row + cell.column) % 2 == 0) getDrawable(R.drawable.board_cell_white) else getDrawable(
+                                R.drawable.board_cell_black
+                            )
                         gridLayout.addView(view)
+                        row += (column + 1) / gridLayout.columnCount
+                        column = (column + 1) % gridLayout.columnCount
                     }
                 }
-        })
+                while (row != gridLayout.rowCount) {
+                    val params = GridLayout.LayoutParams()
+                    params.rowSpec = GridLayout.spec(row, GridLayout.FILL, 1f)
+                    params.columnSpec = GridLayout.spec(column, GridLayout.FILL, 1f)
+                    val view = layoutInflater.inflate(R.layout.game_grid_item, null)
+                    view.layoutParams = params
+                    view.background = getDrawable(R.drawable.blank_cell2)
+                    gridLayout.addView(view)
+                    row += (column + 1) / gridLayout.columnCount
+                    column = (column + 1) % gridLayout.columnCount
+                }
+            })
             //ステージレコードを取得
-        db.recordDao().getByStageId(stage_id).observe(this, Observer<Record> {
-            if (it != null) {
-                bestRank = it.rank
-                bestTime = Time(it.time.toLong())
-            }
-        })
+            db.recordDao().getByStageId(stage_id).observe(this, Observer<Record> {
+                if (it != null) {
+                    bestRank = it.rank
+                    bestTime = Time(it.time.toLong())
+                }
+            })
 
         })
     }
@@ -121,12 +153,15 @@ class GameActivity : AppCompatActivity() {
     private fun isClear() = (numberOfRange == rangeStack.size() + 1)
 
     private fun backToPreviousRange(): Range {
-        if (rangeStack.isEmpty() && currentRange!=Range(-1,-1)) {
-//            setUnCheckedImageResource()
+        if (rangeStack.isEmpty() && currentRange != Range(-1, -1)) {
+            moveKnight(gridLayout, null, currentRange, true)
             return Range(-1, -1)
-        }else {
-            return rangeStack.pop()
+        } else if (!(rangeStack.isEmpty())) {
+            val previousRange = rangeStack.pop()
+            moveKnight(gridLayout, previousRange, currentRange, true)
+            return previousRange
         }
+        return Range(-1, -1)
     }
 
     private fun getRank(time: Time): String {
@@ -155,8 +190,10 @@ class GameActivity : AppCompatActivity() {
             if (rangeStack.isUnique(destinationRange)) {
                 if (currentRange == Range(-1, -1)) {
                     currentRange = destinationRange
+                    moveKnight(gridLayout, destinationRange, null, false)
                 } else if (isMovable(currentRange, destinationRange)) {
                     rangeStack.push(currentRange)
+                    moveKnight(gridLayout, destinationRange, currentRange, false)
                     currentRange = destinationRange
                     setCheckedImageResource(it)
                     if (isClear())
@@ -169,14 +206,47 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
-    private fun setCheckedImageResource(view:View){
+    private fun moveKnight(gridLayout: GridLayout, nextRange: Range?, previousRange: Range?, isBack: Boolean) {
+        if (nextRange != null) {
+            if (isBack) {
+                gridLayout.getChildAt(nextRange.row * gridLayout.columnCount + nextRange.column).background =
+                    if ((nextRange.row + nextRange.column) % 2 == 0) getDrawable(R.drawable.board_cell_white) else getDrawable(
+                        R.drawable.board_cell_black
+                    )
+            }
+            gridLayout.getChildAt(nextRange.row * gridLayout.columnCount + nextRange.column)
+                .findViewById<ImageView>(R.id.pawn).setImageResource(R.drawable.niwatori_pawn)
+        }
+        if (previousRange != null) {
+            gridLayout.getChildAt(previousRange.row * gridLayout.columnCount + previousRange.column)
+                .findViewById<ImageView>(R.id.pawn).setImageResource(0)
+            if (isBack) {
+                gridLayout.getChildAt(previousRange.row * gridLayout.columnCount + previousRange.column).background =
+                    if ((previousRange.row + previousRange.column) % 2 == 0) getDrawable(R.drawable.board_cell_white) else getDrawable(
+                        R.drawable.board_cell_black
+                    )
+            } else {
+                gridLayout.getChildAt(previousRange.row * gridLayout.columnCount + previousRange.column).background =
+                    getDrawable(R.drawable.board_cell_clicked2)
+            }
+        }
+    }
+
+    private fun resetBoards() {
+        gridLayout.removeAllViews()
+        rangeStack.clear()
+        currentRange = Range(-1, -1)
+    }
+
+    private fun setCheckedImageResource(view: View) {
 //        view.setBackgroundResource(R.drawable.checked_game_grid_background)
     }
-    private fun setUnCheckedImageResource(view:View){
+
+    private fun setUnCheckedImageResource(view: View) {
 //        view.setBackgroundResource(R.drawable.checked_game_grid_background)
     }
 
     override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
-        writeFile(this,"nextStage",stage_id.toString())
+        writeFile(this, "nextStage", stage_id.toString())
     }
 }
