@@ -6,7 +6,9 @@ import android.arch.persistence.room.Room
 import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.os.SystemClock
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.Chronometer
@@ -15,8 +17,10 @@ import android.widget.ImageView
 import com.amebaownd.pikohan_nwiatori.knighttour.Data.Record
 import com.amebaownd.pikohan_nwiatori.knighttour.Data.Stage
 import com.amebaownd.pikohan_nwiatori.knighttour.Data.StageInfo
+import java.lang.Exception
 import java.lang.Math.abs
 import java.sql.Time
+import kotlin.concurrent.thread
 
 class GameActivity : AppCompatActivity() {
     val NUMBER_OF_STAGES = 30
@@ -32,6 +36,7 @@ class GameActivity : AppCompatActivity() {
     var cTime = 0
 
     lateinit var gridLayout: GridLayout
+    lateinit var chronometer: Chronometer
     lateinit var db: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +49,8 @@ class GameActivity : AppCompatActivity() {
         db = Room.databaseBuilder(this, AppDatabase::class.java, "database").build()
 
         gridLayout = findViewById<GridLayout>(R.id.game_gridLayout)
+        chronometer = findViewById<Chronometer>(R.id.timer)
+
         createGameScreen()
 
         findViewById<Button>(R.id.pause_game).setOnClickListener(pauseButtonClickListener)
@@ -129,25 +136,41 @@ class GameActivity : AppCompatActivity() {
                 }
             })
             //ステージレコードを取得
-            db.recordDao().getByStageId(stage_id).observe(this, Observer<Record> {
-                if (it != null) {
-                    bestRank = it.rank
-                    bestTime = Time(it.time.toLong())
+            db.recordDao().getByStageId(stage_id).observe(this, Observer<Record> { record ->
+                if (record != null) {
+                    bestRank = record.rank
+                    bestTime = Time(record.time.toLong() * 1000)
                 }
             })
 
         })
+        chronometer.base = SystemClock.elapsedRealtime()
+        chronometer.start()
     }
 
     private fun clear(rank: String, time: Time) {
-        if(stage_id<NUMBER_OF_STAGES)
-            writeFile(this,"nextStage",(stage_id+1).toString())
+        if (stage_id < NUMBER_OF_STAGES)
+            writeFile(this, "nextStage", (stage_id + 1).toString())
         else
-            writeFile(this,"nextStage",1.toString())
+            writeFile(this, "nextStage", 1.toString())
         val dialogManager = DialogManager()
         dialogManager.startDialog(supportFragmentManager, 203, stage_id, rank, time)
-        if (time < bestTime)
+        if (time < bestTime) {
+            val newRecord = Record()
+            newRecord.stageId = this.stage_id
+            newRecord.rank = rank
+            newRecord.time = time.seconds
+
+            thread {
+                try {
+                    db.recordDao().update(newRecord)
+                } catch (e: Exception) {
+                    Log.d("update database exception", e.toString())
+                }
+            }
             dialogManager.startDialog(supportFragmentManager, 204, stage_id, rank, time)
+        }
+
     }
 
     private fun isMovable(currentRange: Range, destinationRange: Range) =
@@ -200,11 +223,14 @@ class GameActivity : AppCompatActivity() {
                     moveKnight(gridLayout, destinationRange, currentRange, false)
                     currentRange = destinationRange
                     setCheckedImageResource(it)
-                    if (isClear())
+                    if (isClear()) {
+                        chronometer.stop()
                         clear(
-                            getRank(Time(findViewById<Chronometer>(R.id.timer).base)),
-                            Time(findViewById<Chronometer>(R.id.timer).base)
+                            getRank(Time(SystemClock.elapsedRealtime() - chronometer.base)),
+                            Time(SystemClock.elapsedRealtime() - chronometer.base)
                         )
+
+                    }
                 }
             }
         }
@@ -225,12 +251,14 @@ class GameActivity : AppCompatActivity() {
             gridLayout.getChildAt(previousRange.row * gridLayout.columnCount + previousRange.column)
                 .findViewById<ImageView>(R.id.pawn).setImageResource(0)
             if (isBack) {
-                gridLayout.getChildAt(previousRange.row * gridLayout.columnCount + previousRange.column).background =
+                gridLayout.getChildAt(previousRange.row * gridLayout.columnCount + previousRange.column)
+                    .background =
                     if ((previousRange.row + previousRange.column) % 2 == 0) getDrawable(R.drawable.board_cell_white) else getDrawable(
                         R.drawable.board_cell_black
                     )
             } else {
-                gridLayout.getChildAt(previousRange.row * gridLayout.columnCount + previousRange.column).background =
+                gridLayout.getChildAt(previousRange.row * gridLayout.columnCount + previousRange.column)
+                    .background =
                     getDrawable(R.drawable.board_cell_clicked2)
             }
         }
