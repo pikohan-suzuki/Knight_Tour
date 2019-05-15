@@ -43,7 +43,6 @@ class GameActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
 
-        val intent = Intent()
         stage_id = intent.getIntExtra("stage_id", 1)
 
         db = Room.databaseBuilder(this, AppDatabase::class.java, "database").build()
