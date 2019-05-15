@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.widget.Button
 
 class HowToPlayActivity() : AppCompatActivity() {
@@ -45,16 +46,14 @@ class HowToPlayActivity() : AppCompatActivity() {
     }
 
     private fun nextTab() {
-        if (tab.position < TAB_SIZE - 1) {
-            tab = tabLayout.getTabAt(tab.position + 1)!!
-            tab.customView = adapter.getTabView(tabLayout, tab.position + 1)
+        if (tabLayout.selectedTabPosition < tabLayout.tabCount-1) {
+            tabLayout.getTabAt(tabLayout.selectedTabPosition+1)!!.select()
         }
     }
 
     private fun previousTab() {
-        if (tab.position > 0) {
-            tab = tabLayout.getTabAt(tab.position - 1)!!
-            tab.customView = adapter.getTabView(tabLayout, tab.position - 1)
+        if (tabLayout.selectedTabPosition > 0) {
+            tabLayout.getTabAt(tabLayout.selectedTabPosition-1)!!.select()
         }
     }
 }
