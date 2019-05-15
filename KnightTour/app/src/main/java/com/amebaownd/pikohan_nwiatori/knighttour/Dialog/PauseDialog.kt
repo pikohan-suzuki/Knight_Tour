@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.TextView
 import com.amebaownd.pikohan_nwiatori.knighttour.R
 import com.amebaownd.pikohan_nwiatori.knighttour.StageSelectActivity
+import com.amebaownd.pikohan_nwiatori.knighttour.writeFile
 import java.sql.Time
 import java.text.SimpleDateFormat
 
@@ -25,6 +26,7 @@ class PauseDialog():DialogFragment() {
         }
         val goToStageSelectButton = alertDialog.findViewById<Button>(R.id.goto_select_pause_button)
         goToStageSelectButton.setOnClickListener{
+            writeFile(this.context!!,"nextStage",stageId.toString())
             this.dismiss()
             val intent = Intent(this.context, StageSelectActivity::class.java)
             startActivity(intent)

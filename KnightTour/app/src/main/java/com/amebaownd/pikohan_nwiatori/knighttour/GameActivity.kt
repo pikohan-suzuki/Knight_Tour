@@ -140,6 +140,10 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun clear(rank: String, time: Time) {
+        if(stage_id<NUMBER_OF_STAGES)
+            writeFile(this,"nextStage",(stage_id+1).toString())
+        else
+            writeFile(this,"nextStage",1.toString())
         val dialogManager = DialogManager()
         dialogManager.startDialog(supportFragmentManager, 203, stage_id, rank, time)
         if (time < bestTime)
