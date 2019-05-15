@@ -12,7 +12,7 @@
             android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="@+id/guideline5"
             android:layout_marginStart="8dp"
             app:layout_constraintTop_toTopOf="@+id/goto_select_clear_button"
-            app:layout_constraintBottom_toBottomOf="@+id/goto_select_clear_button"/>
+            app:layout_constraintBottom_toBottomOf="@+id/goto_select_clear_button" android:text="次のステージへ"/>
 
     <Button
             android:id="@+id/goto_select_clear_button"
@@ -21,7 +21,7 @@
             android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintVertical_bias="0.0" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp" app:layout_constraintEnd_toStartOf="@+id/guideline5"
-            android:layout_marginEnd="8dp" android:layout_marginTop="8dp"/>
+            android:layout_marginEnd="8dp" android:layout_marginTop="8dp" android:text="ステージセレクト"/>
 
     <TextView
             android:id="@+id/clear_time_clear_textView"

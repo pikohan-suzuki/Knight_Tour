@@ -41,7 +41,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_weight="1"
-        />
+                android:text="ステージセレクト"/>
         <Button
                 android:id="@+id/from_beginning_button"
                 android:layout_width="wrap_content"
@@ -50,7 +50,7 @@
                 android:layout_marginStart="8dp" android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:layout_weight="1"
-        />
+                android:text="はじめから"/>
         <Button
                 android:id="@+id/from_continuation_button"
                 android:layout_width="wrap_content"
@@ -58,7 +58,7 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_weight="1"/>
+                android:layout_weight="1" android:text="つづきから"/>
         <Button
                 android:id="@+id/how_to_play_button"
                 android:layout_width="wrap_content"
@@ -67,7 +67,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginBottom="8dp"
-                android:layout_weight="1"/>
+                android:layout_weight="1" android:text="あそびかた"/>
     </LinearLayout>
     <android.support.constraint.Guideline android:layout_width="wrap_content" android:layout_height="wrap_content"
                                           android:id="@+id/guideline"

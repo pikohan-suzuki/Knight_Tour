@@ -52,10 +52,11 @@
             android:id="@+id/back_how_to_play_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp" android:layout_marginRight="8dp" android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp" android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginLeft="8dp" android:layout_marginStart="8dp" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toTopOf="@+id/guideline2" app:layout_constraintHorizontal_bias="0.0"/>
+            android:layout_marginStart="8dp" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="@+id/guideline2" app:layout_constraintHorizontal_bias="0.0"
+            android:text="戻る"/>
     <android.support.constraint.Guideline android:layout_width="wrap_content" android:layout_height="wrap_content"
                                           android:id="@+id/guideline2"
                                           android:orientation="horizontal"
