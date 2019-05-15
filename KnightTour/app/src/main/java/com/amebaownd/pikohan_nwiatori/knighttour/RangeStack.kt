@@ -16,7 +16,12 @@ class RangeStack(){
     }
     fun isEmpty() = mutableList.isEmpty()
 
-    fun isUnique(range:Range)=mutableList.contains(range)
+    fun isUnique(range:Range)=!(mutableList.contains(range))
 
     fun size() = mutableList.size
+
+    fun clear(){
+        while(mutableList.size!=0)
+            this.pop()
+    }
 }
