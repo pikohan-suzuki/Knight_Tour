@@ -138,10 +138,9 @@ class GameActivity : AppCompatActivity() {
                     bestTime = Time(record.time.toLong() * 1000)
                 }
             })
-
+            chronometer.base = SystemClock.elapsedRealtime()
+            chronometer.start()
         })
-        chronometer.base = SystemClock.elapsedRealtime()
-        chronometer.start()
     }
 
     private fun clear(rank: String, time: Time) {
