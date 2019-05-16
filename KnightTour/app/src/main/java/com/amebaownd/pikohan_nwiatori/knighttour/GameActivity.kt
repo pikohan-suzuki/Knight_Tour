@@ -10,10 +10,7 @@ import android.os.SystemClock
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.Chronometer
-import android.widget.GridLayout
-import android.widget.ImageView
+import android.widget.*
 import com.amebaownd.pikohan_nwiatori.knighttour.Data.Record
 import com.amebaownd.pikohan_nwiatori.knighttour.Data.Stage
 import com.amebaownd.pikohan_nwiatori.knighttour.Data.StageInfo
@@ -244,7 +241,9 @@ class GameActivity : AppCompatActivity() {
                     )
             }
             gridLayout.getChildAt(nextRange.row * gridLayout.columnCount + nextRange.column)
-                .findViewById<ImageView>(R.id.pawn).setImageResource(R.drawable.niwatori_pawn)
+                .findViewById<ImageView>(R.id.pawn).setImageResource(R.drawable.knight)
+            gridLayout.getChildAt(nextRange.row * gridLayout.columnCount + nextRange.column)
+                .background=getDrawable(R.drawable.board_cell_clicked2)
         }
         if (previousRange != null) {
             gridLayout.getChildAt(previousRange.row * gridLayout.columnCount + previousRange.column)
@@ -256,9 +255,9 @@ class GameActivity : AppCompatActivity() {
                         R.drawable.board_cell_black
                     )
             } else {
-                gridLayout.getChildAt(previousRange.row * gridLayout.columnCount + previousRange.column)
-                    .background =
-                    getDrawable(R.drawable.board_cell_clicked2)
+//                gridLayout.getChildAt(previousRange.row * gridLayout.columnCount + previousRange.column)
+//                    .background =
+//                    getDrawable(R.drawable.board_cell_clicked2)
             }
         }
     }
@@ -267,6 +266,7 @@ class GameActivity : AppCompatActivity() {
         gridLayout.removeAllViews()
         rangeStack.clear()
         currentRange = Range(-1, -1)
+        findViewById<TextView>(R.id.game_stage_id_textView).text = getString(R.string.stage_id_pause,stage_id)
     }
 
     private fun setCheckedImageResource(view: View) {
