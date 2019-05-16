@@ -8,16 +8,18 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Button
 import android.widget.GridLayout
+import android.widget.ImageView
 import android.widget.TextView
 import com.amebaownd.pikohan_nwiatori.knighttour.Data.Record
 import java.sql.Time
+import java.util.*
 
 class StageSelectActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stage_select)
-
+        val rand = Random()
         val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "database").build()
         val gridLayout = findViewById<GridLayout>(R.id.stage_select_gridLayout)
         db.recordDao().getAllOrderByStageId().observe(this, Observer<List<Record>> {
@@ -25,9 +27,34 @@ class StageSelectActivity : AppCompatActivity() {
                 var count=0
                 for (i in 0 until it.size) {
                     val item = layoutInflater.inflate(R.layout.stage_select_grid_item, null)
-                    item.background=getDrawable(R.drawable.board_cell_white)
+                    val r = rand.nextInt(5)
+                    when(r%4){
+                        0->
+                            item.background=getDrawable(R.drawable.blue_paper)
+                        1->
+                            item.background=getDrawable(R.drawable.red_paper)
+                        2->
+                            item.background=getDrawable(R.drawable.green_paper)
+                        3->
+                            item.background=getDrawable(R.drawable.orange_paper)
+                    }
+                    item.rotation=(r* Math.pow((-1).toDouble(),(r%2).toDouble())).toFloat()
                     item.findViewById<TextView>(R.id.stage_id_stage_select_grid_item).text = (i + 1).toString()
-                    item.findViewById<TextView>(R.id.rank_stage_select_grid_item).text=it[i].rank
+                    when(it[i].rank){
+                        "S"->
+                            item.findViewById<ImageView>(R.id.stage_select_item_rank).setImageResource(R.drawable.rank_s)
+                        "A"->
+                            item.findViewById<ImageView>(R.id.stage_select_item_rank).setImageResource(R.drawable.rank_a)
+                        "B"->
+                            item.findViewById<ImageView>(R.id.stage_select_item_rank).setImageResource(R.drawable.rank_b)
+                        "C"->
+                            item.findViewById<ImageView>(R.id.stage_select_item_rank).setImageResource(R.drawable.rank_c)
+                        "D"->
+                            item.findViewById<ImageView>(R.id.stage_select_item_rank).setImageResource(R.drawable.rank_d)
+                        else->
+                            item.findViewById<ImageView>(R.id.stage_select_item_rank).setImageResource(0)
+                    }
+
                     item.setOnClickListener(gridItemClickListener(i+1,it[i].rank,Time(it[i].time.toLong()*1000)))
                     if(it[i].rank!="")  count+=1
                     val params = GridLayout.LayoutParams()
@@ -36,7 +63,7 @@ class StageSelectActivity : AppCompatActivity() {
                     item.layoutParams = params
                     gridLayout.addView(item)
                 }
-                findViewById<TextView>(R.id.stage_select_cleared_textView).text=getString(R.string.clear_percent,count,it.size)
+                findViewById<TextView>(R.id.stage_select_cleared_textView).text=getString(R.string.clear_percent,count,it.size,(count/it.size*100))
             }
         })
 
