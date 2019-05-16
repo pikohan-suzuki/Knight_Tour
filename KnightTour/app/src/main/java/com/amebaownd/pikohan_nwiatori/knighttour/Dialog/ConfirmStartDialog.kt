@@ -40,7 +40,6 @@ class ConfirmStartDialog(): DialogFragment() {
 
         val dialogBuilder = AlertDialog.Builder(activity)
         dialogBuilder.setView(alertDialog)
-        this.isCancelable=false
         return dialogBuilder.create()
     }
 }
