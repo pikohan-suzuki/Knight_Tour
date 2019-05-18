@@ -47,6 +47,9 @@ class DialogManager(){
             //congratulation
             205->{
                 val dialog= CongratulationDialog()
+                dialog.rank=rank
+                dialog.time=time
+                dialog.stageId=stageId
                 dialog.setTargetFragment(null,id)
                 dialog.show(fragmentManager,"congratulation")
             }
