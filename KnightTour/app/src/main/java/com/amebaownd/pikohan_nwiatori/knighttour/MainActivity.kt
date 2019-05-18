@@ -190,7 +190,7 @@ class MainActivity : AppCompatActivity() {
                         (view as ImageButton).setImageResource(R.drawable.privacy_policy_clicked)
                     }else if(event.action==MotionEvent.ACTION_UP){
                         (view as ImageButton).setImageResource(R.drawable.privacy_policy_button)
-                        val uri = Uri.parse("https://pikohan-niwatori.amebaownd.com/posts/6171216")
+                        val uri = Uri.parse("https://pikohan-niwatori.amebaownd.com/posts/6265383")
                         val intent =Intent(Intent.ACTION_VIEW,uri)
                         startActivity(intent)
                     }
