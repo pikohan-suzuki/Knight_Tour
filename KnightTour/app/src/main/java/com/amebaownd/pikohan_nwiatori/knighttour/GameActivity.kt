@@ -9,6 +9,7 @@ import android.os.PersistableBundle
 import android.os.SystemClock
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.widget.*
 import com.amebaownd.pikohan_nwiatori.knighttour.Data.Record
@@ -49,10 +50,14 @@ class GameActivity : AppCompatActivity() {
 
         createGameScreen()
 
-        findViewById<Button>(R.id.pause_game).setOnClickListener(pauseButtonClickListener)
-        findViewById<Button>(R.id.back_to_previous_range_button).setOnClickListener {
-            currentRange = backToPreviousRange()
-        }
+//        findViewById<ImageButton>(R.id.pause_game).setOnClickListener(pauseButtonClickListener)
+//        findViewById<ImageButton>(R.id.back_to_previous_range_imageButton).setOnClickListener {
+//            currentRange = backToPreviousRange()
+//        }
+
+
+        findViewById<ImageButton>(R.id.pause_game).setOnTouchListener(setTouchListener(findViewById<ImageButton>(R.id.pause_game)))
+        findViewById<ImageButton>(R.id.back_to_previous_range_imageButton).setOnTouchListener(setTouchListener(findViewById<ImageButton>(R.id.back_to_previous_range_imageButton)))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
@@ -149,7 +154,10 @@ class GameActivity : AppCompatActivity() {
         else
             writeFile(this, "nextStage", 1.toString())
         val dialogManager = DialogManager()
-        dialogManager.startDialog(supportFragmentManager, 203, stage_id, rank, time)
+        if(stage_id==NUMBER_OF_STAGES)
+            dialogManager.startDialog(supportFragmentManager, 205, stage_id, rank, time)
+        else
+            dialogManager.startDialog(supportFragmentManager, 203, stage_id, rank, time)
         if (time < bestTime) {
             val newRecord = Record()
             newRecord.stageId = this.stage_id
@@ -204,6 +212,35 @@ class GameActivity : AppCompatActivity() {
     private val pauseButtonClickListener = View.OnClickListener {
         val dialogManager = DialogManager()
         dialogManager.startDialog(supportFragmentManager, 201, stage_id, bestRank, bestTime)
+    }
+
+    private fun setTouchListener(view:View):View.OnTouchListener?{
+        when(view.id){
+            R.id.pause_game->{
+                return View.OnTouchListener { view, event ->
+                    if(event.action==MotionEvent.ACTION_DOWN){
+                        (view as ImageView).setImageResource(R.drawable.pause_button_clicked)
+                    }else if(event.action==MotionEvent.ACTION_UP){
+                        val dialogManager = DialogManager()
+                        dialogManager.startDialog(supportFragmentManager, 201, stage_id, bestRank, bestTime)
+                        (view as ImageView).setImageResource(R.drawable.pause_button)
+                    }
+                    return@OnTouchListener true
+                }
+            }
+            R.id.back_to_previous_range_imageButton->{
+                return View.OnTouchListener { view, event ->
+                    if(event.action==MotionEvent.ACTION_DOWN){
+                        (view as ImageView).setImageResource(R.drawable.back_button_clicked)
+                    }else if(event.action==MotionEvent.ACTION_UP){
+                        currentRange = backToPreviousRange()
+                        (view as ImageView).setImageResource(R.drawable.back_button)
+                    }
+                    return@OnTouchListener true
+                }
+            }
+        }
+        return null
     }
 
     private fun gridItemClickOnListener(row: Int, column: Int): View.OnClickListener {
