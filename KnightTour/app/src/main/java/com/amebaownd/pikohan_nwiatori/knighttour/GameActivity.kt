@@ -254,7 +254,6 @@ class GameActivity : AppCompatActivity() {
                     rangeStack.push(currentRange)
                     moveKnight(gridLayout, destinationRange, currentRange, false)
                     currentRange = destinationRange
-                    setCheckedImageResource(it)
                     if (isClear()) {
                         chronometer.stop()
                         clear(
@@ -303,14 +302,6 @@ class GameActivity : AppCompatActivity() {
         rangeStack.clear()
         currentRange = Range(-1, -1)
         findViewById<TextView>(R.id.game_stage_id_textView).text = getString(R.string.stage_id_pause,stage_id)
-    }
-
-    private fun setCheckedImageResource(view: View) {
-//        view.setBackgroundResource(R.drawable.checked_game_grid_background)
-    }
-
-    private fun setUnCheckedImageResource(view: View) {
-//        view.setBackgroundResource(R.drawable.checked_game_grid_background)
     }
 
     override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
