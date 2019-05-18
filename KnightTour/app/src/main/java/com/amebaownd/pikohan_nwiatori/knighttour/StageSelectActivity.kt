@@ -5,11 +5,9 @@ import android.arch.persistence.room.Room
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.MotionEvent
 import android.view.View
-import android.widget.Button
-import android.widget.GridLayout
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import com.amebaownd.pikohan_nwiatori.knighttour.Data.Record
 import java.sql.Time
 import java.util.*
@@ -55,7 +53,7 @@ class StageSelectActivity : AppCompatActivity() {
                             item.findViewById<ImageView>(R.id.stage_select_item_rank).setImageResource(0)
                     }
 
-                    item.setOnClickListener(gridItemClickListener(i+1,it[i].rank,Time(it[i].time.toLong()*1000)))
+                    item.setOnClickListener(gridItemClickListener(i+1,it[i].rank,it[i].time))
                     if(it[i].rank!="")  count+=1
                     val params = GridLayout.LayoutParams()
                     params.rowSpec = GridLayout.spec(i / 6,GridLayout.FILL,1f)
@@ -63,22 +61,32 @@ class StageSelectActivity : AppCompatActivity() {
                     item.layoutParams = params
                     gridLayout.addView(item)
                 }
-                findViewById<TextView>(R.id.stage_select_cleared_textView).text=getString(R.string.clear_percent,count,it.size,(count/it.size*100))
+                findViewById<TextView>(R.id.stage_select_cleared_textView).text=getString(R.string.clear_percent,count,it.size,(count*100/it.size))
             }
         })
 
-        val backButton = findViewById<Button>(R.id.back_stage_select_button)
-        backButton.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+        val backButton = findViewById<ImageButton>(R.id.back_stage_select_imageButton)
+        backButton.setOnTouchListener{view, motionEvent ->
+            if(motionEvent.action==MotionEvent.ACTION_DOWN){
+                (view as ImageButton).setImageResource(R.drawable.back_button_background_clicked)
+            }else if(motionEvent.action==MotionEvent.ACTION_UP){
+                (view as ImageButton).setImageResource(R.drawable.back_button_background)
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            }
+            return@setOnTouchListener true
         }
 
     }
 
-    private fun gridItemClickListener(stageId: Int, rank: String, time: Time): View.OnClickListener {
+    private fun gridItemClickListener(stageId: Int, rank: String, time: Int): View.OnClickListener {
         return View.OnClickListener {
             val dialogManager = DialogManager()
-            dialogManager.startDialog(supportFragmentManager, 202, stageId, rank, time)
+            if(time==99999) {
+                dialogManager.startDialog(supportFragmentManager, 202, stageId, rank, null)
+            }else{
+                dialogManager.startDialog(supportFragmentManager, 202, stageId, rank, Time(time.toLong()*1000))
+            }
         }
     }
 }

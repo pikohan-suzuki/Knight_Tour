@@ -3,12 +3,15 @@ package com.amebaownd.pikohan_nwiatori.knighttour
 import android.app.Activity
 import android.arch.persistence.room.Room
 import android.content.Intent
+import android.media.Image
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Html
 import android.util.Log
-import android.widget.Button
-import android.widget.TextView
+import android.view.MotionEvent
+import android.view.View
+import android.widget.ImageButton
+import android.widget.ImageView
 import com.amebaownd.pikohan_nwiatori.knighttour.Data.Record
 import com.amebaownd.pikohan_nwiatori.knighttour.Data.Stage
 import com.amebaownd.pikohan_nwiatori.knighttour.Data.StageInfo
@@ -19,42 +22,34 @@ import kotlin.concurrent.thread
 class MainActivity : AppCompatActivity() {
 
     private var nextStage = 0
-    lateinit var stageTextVew: TextView
     lateinit var db: AppDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         nextStage = readFile(this, "nextStage")?.toInt() ?: 1
-        stageTextVew = findViewById(R.id.stage_id_front_textView)
-        stageTextVew.text = getString(R.string.stage_id_front, nextStage)
 
-        val privacyPolicyTextView = findViewById<TextView>(R.id.privacy_policy_textView)
-        privacyPolicyTextView.text =
-            Html.fromHtml("<a href=\"https://pikohan-niwatori.amebaownd.com/posts/6171216\">PrivacyPolicy</a>")
-        privacyPolicyTextView.linksClickable = true
-        val startBeginButton = findViewById<Button>(R.id.from_beginning_button)
-        startBeginButton.setOnClickListener {
-            val intent = Intent(this, GameActivity::class.java)
-            intent.putExtra("stage_id", 1)
-            startActivityForResult(intent, 101)
-        }
-        val selectStageButton = findViewById<Button>(R.id.select_stage_front_button)
-        selectStageButton.setOnClickListener {
-            val intent = Intent(this, StageSelectActivity::class.java)
-            startActivity(intent)
-        }
-        val howToPlayButton = findViewById<Button>(R.id.how_to_play_button)
-        howToPlayButton.setOnClickListener {
-            val intent = Intent(this, HowToPlayActivity::class.java)
-            startActivity(intent)
-        }
-        val startContinuationButton = findViewById<Button>(R.id.from_continuation_button)
-        startContinuationButton.setOnClickListener {
-            val intent = Intent(this, GameActivity::class.java)
-            intent.putExtra("stage_id", nextStage)
-            startActivity(intent)
-        }
+        val privacyPolicyButton = findViewById<ImageButton>(R.id.privacy_policy_imageButton)
+        privacyPolicyButton.setOnTouchListener(setTouchListener(privacyPolicyButton))
+        val startBeginButton = findViewById<ImageButton>(R.id.from_beginning_imageButton)
+        startBeginButton.setOnTouchListener(setTouchListener(startBeginButton))
+//        startBeginButton.setOnClickListener{
+//            val intent = Intent(this, GameActivity::class.java)
+//            intent.putExtra("stage_id", 1)
+//            startActivityForResult(intent, 101)
+//        }
+        val selectStageButton = findViewById<ImageButton>(R.id.select_stage_front_ImageButton)
+        selectStageButton.setOnTouchListener(setTouchListener(selectStageButton))
+//        selectStageButton.setOnClickListener {
+//            val intent = Intent(this, StageSelectActivity::class.java)
+//            startActivity(intent)
+//        }
+        val howToPlayButton = findViewById<ImageButton>(R.id.how_to_play_ImageButton)
+        howToPlayButton.setOnTouchListener(setTouchListener(howToPlayButton))
+//        howToPlayButton.setOnClickListener {
+//            val intent = Intent(this, HowToPlayActivity::class.java)
+//            startActivity(intent)
+//        }
         val db = Room.databaseBuilder(this, AppDatabase::class.java, "database").build()
         val data1 = readStageCsv()
         thread {
@@ -86,7 +81,6 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         if (intent != null && requestCode == 101 && resultCode == Activity.RESULT_OK) {
             nextStage = intent.getIntExtra("stage_id", 1)
-            stageTextVew.text = getString(R.string.stage_id_front, nextStage)
         }
     }
 
@@ -105,8 +99,8 @@ class MainActivity : AppCompatActivity() {
                     this.column = str[2].toInt()
                     this.sTime = str[3].toInt()
                     this.aTime = str[4].toInt()
-                    this.sTime = str[5].toInt()
-                    this.aTime = str[6].toInt()
+                    this.bTime = str[5].toInt()
+                    this.cTime = str[6].toInt()
                 }
                 results.add(result)
             }
@@ -132,7 +126,7 @@ class MainActivity : AppCompatActivity() {
         }
         return results.toList()
     }
-
+    //クリア記録の読み込み
     private fun readRecordCsv(): List<Record> {
         val inputStream = resources.assets.open("record.csv")
         val inputStreamReader = InputStreamReader(inputStream)
@@ -143,11 +137,108 @@ class MainActivity : AppCompatActivity() {
                 val result = Record().apply {
                     this.stageId = str[0].toInt()
                     this.time = str[1].toInt()
-                    this.rank = str[2].toString()
+                    this.rank = str[2]
                 }
                 results.add(result)
             }
         }
         return results.toList()
     }
+
+    private fun setTouchListener(view:View):View.OnTouchListener?{
+        when(view.id){
+            R.id.from_beginning_imageButton->{
+                return View.OnTouchListener { view, event ->
+                    if(event.action==MotionEvent.ACTION_DOWN){
+                        (view as ImageButton).setImageResource(R.drawable.start_clicked)
+                    }else if(event.action==MotionEvent.ACTION_UP){
+                        (view as ImageButton).setImageResource(R.drawable.start_button)
+                        val intent = Intent(this, GameActivity::class.java)
+                        intent.putExtra("stage_id", 1)
+                        startActivityForResult(intent, 101)
+                    }
+                    return@OnTouchListener true
+                }
+            }
+            R.id.select_stage_front_ImageButton->{
+                return View.OnTouchListener { view, event ->
+                    if(event.action==MotionEvent.ACTION_DOWN){
+                        (view as ImageButton).setImageResource(R.drawable.stage_select_clicked)
+                    }else if(event.action==MotionEvent.ACTION_UP){
+                        val intent = Intent(this, StageSelectActivity::class.java)
+                        startActivity(intent)
+                        (view as ImageButton).setImageResource(R.drawable.stage_select_button)
+                    }
+                    return@OnTouchListener true
+                }
+            }
+            R.id.how_to_play_ImageButton->{
+                return View.OnTouchListener { view, event ->
+                    if(event.action==MotionEvent.ACTION_DOWN){
+                        (view as ImageButton).setImageResource(R.drawable.how_to_play_clicked)
+                    }else if(event.action==MotionEvent.ACTION_UP){
+                        (view as ImageButton).setImageResource(R.drawable.how_to_play_button)
+                        val intent = Intent(this, HowToPlayActivity::class.java)
+                        startActivity(intent)
+                    }
+                    return@OnTouchListener true
+                }
+            }
+            R.id.privacy_policy_imageButton->{
+                return View.OnTouchListener { view, event ->
+                    if(event.action==MotionEvent.ACTION_DOWN){
+                        (view as ImageButton).setImageResource(R.drawable.privacy_policy_clicked)
+                    }else if(event.action==MotionEvent.ACTION_UP){
+                        (view as ImageButton).setImageResource(R.drawable.privacy_policy_button)
+                        val uri = Uri.parse("https://pikohan-niwatori.amebaownd.com/posts/6171216")
+                        val intent =Intent(Intent.ACTION_VIEW,uri)
+                        startActivity(intent)
+                    }
+                    return@OnTouchListener true
+                }
+            }
+        }
+        return null
+    }
+//    class ImageButtonOnClickListener() : View.OnTouchListener{
+//        override fun onTouch(view: View?, event: MotionEvent?): Boolean {
+//            if(view!=null && event!=null){
+//                when(event.action){
+//                    MotionEvent.ACTION_BUTTON_PRESS->{
+//                        when(view.id){
+//                            R.id.from_beginning_imageButton->{
+////                                (view as ImageButton).setImageResource()
+//                            }
+//                            R.id.select_stage_front_ImageButton->{
+////                                (view as ImageButton).setImageResource()
+//                            }
+//                            R.id.how_to_play_ImageButton->{
+////                                (view as ImageButton).setImageResource()
+//                            }
+//                            R.id.privacy_policy_imageButton->{
+////                                (view as ImageButton).setImageResource()
+//                            }
+//                        }
+//                    }
+//                    MotionEvent.ACTION_BUTTON_RELEASE->{
+//                        when(view.id){
+//                            R.id.from_beginning_imageButton->{
+////                                (view as ImageButton).setImageResource()
+//                            }
+//                            R.id.select_stage_front_ImageButton->{
+////                                (view as ImageButton).setImageResource()
+//                            }
+//                            R.id.how_to_play_ImageButton->{
+////                                (view as ImageButton).setImageResource()
+//                            }
+//                            R.id.privacy_policy_imageButton->{
+////                                (view as ImageButton).setImageResource()
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//            return false
+//        }
+//    }
 }
