@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Knight\'s Tour</string>
-    <string name="rank">Rank: %1$s</string>
-    <string name="stage_id_confirm_start">No.%1$d</string>
+    <string name="rank">Rank:"  "%1$s</string>
+    <string name="stage_id_confirm_start">Stage:"  "%1$d</string>
     <string name="stage_id_front">次のステージ： %1$d</string>
     <string name="stage_id_pause">    Stage No. %1$d</string>
     <string name="clear_percent">Clear %1$d/%2$d   %3$d%%</string>
