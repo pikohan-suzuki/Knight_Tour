@@ -35,9 +35,16 @@ class PauseDialog():DialogFragment() {
         val stageIdTextView = alertDialog.findViewById<TextView>(R.id.stage_id_pause_textView)
         stageIdTextView.text = getString(R.string.stage_id_pause,stageId)
         val rankTextView =alertDialog.findViewById<TextView>(R.id.best_rank_pause_textView)
-        rankTextView.text=getString(R.string.rank,rank)
+        if(rank!="")
+            rankTextView.text=getString(R.string.rank,rank)
+        else
+            rankTextView.text=getString(R.string.rank,"-")
         val timeTextView = alertDialog.findViewById<TextView>(R.id.time_pause_textVIew)
-        timeTextView.text=SimpleDateFormat("mm:ss").format(time)
+        if(time!=Time(99999*1000)) {
+            timeTextView.text = "Time: " + SimpleDateFormat("mm:ss").format(time)
+        }else{
+            timeTextView.text = "Time: --:--"
+        }
 
         val dialogBuilder = AlertDialog.Builder(activity)
         dialogBuilder.setView(alertDialog)

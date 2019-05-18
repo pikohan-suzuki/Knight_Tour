@@ -1,11 +1,13 @@
 package com.amebaownd.pikohan_nwiatori.knighttour.Dialog
 
+import android.app.ActionBar
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import com.amebaownd.pikohan_nwiatori.knighttour.GameActivity
@@ -34,10 +36,17 @@ class ConfirmStartDialog(): DialogFragment() {
         val stageIdTextView = alertDialog.findViewById<TextView>(R.id.stage_id_confirm_start_textView)
         stageIdTextView.text = getString(R.string.stage_id_confirm_start,stageId)
         val rankTextView =alertDialog.findViewById<TextView>(R.id.rank_confirm_start_textView)
-        rankTextView.text=getString(R.string.rank,rank)
-        val timeTextView = alertDialog.findViewById<TextView>(R.id.time_confirm_start_textView)
-        timeTextView.text= SimpleDateFormat("mm:ss").format(time)
+        if(rank!="")
+            rankTextView.text=getString(R.string.rank,rank)
+        else
+            rankTextView.text=getString(R.string.rank,"-")
 
+        val timeTextView = alertDialog.findViewById<TextView>(R.id.time_confirm_start_textView)
+        if(time!=null) {
+            timeTextView.text = "Time: " + SimpleDateFormat("mm:ss").format(time)
+        }else{
+            timeTextView.text="Time: --:--"
+        }
         val dialogBuilder = AlertDialog.Builder(activity)
         dialogBuilder.setView(alertDialog)
         return dialogBuilder.create()
