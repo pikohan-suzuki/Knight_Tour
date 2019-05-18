@@ -3,62 +3,101 @@
                                              xmlns:app="http://schemas.android.com/apk/res-auto"
                                              xmlns:tools="http://schemas.android.com/tools"
                                              android:layout_width="match_parent"
-                                             android:layout_height="match_parent">
-
-    <android.support.design.widget.TabLayout
-            android:id="@+id/tab_layout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.0">
-
-    </android.support.design.widget.TabLayout>
+                                             android:layout_height="match_parent"
+>
 
     <android.support.v4.view.ViewPager
             android:id="@+id/viewPager"
             android:layout_width="0dp"
             android:layout_height="0dp" app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp" android:layout_marginRight="8dp"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/tab_layout"
-            app:layout_constraintBottom_toTopOf="@+id/guideline2" app:layout_constraintVertical_bias="0.6"
-            app:layout_constraintHorizontal_bias="0.0">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/guideline2"
+            app:layout_constraintHorizontal_bias="0.1"
+            app:layout_constraintTop_toTopOf="@+id/guideline19">
     </android.support.v4.view.ViewPager>
 
-    <Button
+    <ImageButton
             android:id="@+id/next_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp" app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/viewPager"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp"
-            app:layout_constraintHorizontal_bias="1.0" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/tab_layout" android:text="Next"/>
-    <Button
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline24"
+            app:layout_constraintHorizontal_bias="0.0"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="@+id/guideline2"
+            app:layout_constraintVertical_bias="0.5" android:src="@drawable/next_direction"
+            android:background="?android:attr/panelBackground" android:scaleType="fitCenter"/>
+    <ImageButton
             android:id="@+id/previous_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp" app:layout_constraintHorizontal_bias="0.0" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/viewPager" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/viewPager" android:text="Previous"/>
-    <Button
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="@+id/guideline23"
+            android:layout_marginStart="8dp" app:layout_constraintEnd_toStartOf="@+id/guideline24"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="@+id/guideline2" android:src="@drawable/previous_direction"
+            android:background="?android:attr/panelBackground" android:scaleType="fitCenter"
+            app:layout_constraintHorizontal_bias="1.0"/>
+    <ImageButton
             android:id="@+id/back_how_to_play_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp" android:layout_marginBottom="8dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toTopOf="@+id/guideline2" app:layout_constraintHorizontal_bias="0.0"
-            android:text="戻る"/>
+            app:layout_constraintTop_toTopOf="@+id/guideline2" app:layout_constraintHorizontal_bias="0.1"
+            android:text="戻る" android:src="@drawable/how_to_play_back" android:scaleType="fitCenter"
+            app:layout_constraintVertical_bias="0.0" app:layout_constraintEnd_toStartOf="@+id/guideline25"
+            android:layout_marginEnd="8dp" android:layout_marginTop="4dp" android:layout_marginBottom="4dp"
+            android:layout_marginStart="4dp" android:background="?android:attr/panelBackground"/>
     <android.support.constraint.Guideline android:layout_width="wrap_content" android:layout_height="wrap_content"
                                           android:id="@+id/guideline2"
                                           android:orientation="horizontal"
                                           app:layout_constraintGuide_percent="0.9"/>
+    <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp" app:srcCompat="@drawable/red_tab_background"
+            android:id="@+id/red_tab_imageButton" app:layout_constraintBottom_toTopOf="@+id/guideline19"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline22" app:layout_constraintTop_toTopOf="parent"
+            android:scaleType="fitXY"/>
+    <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp" app:srcCompat="@drawable/green_tab_background"
+            android:id="@+id/green_tab_imageButton" app:layout_constraintBottom_toTopOf="@+id/guideline19"
+            app:layout_constraintStart_toStartOf="@+id/guideline23"
+            app:layout_constraintEnd_toStartOf="@+id/guideline24" app:layout_constraintTop_toTopOf="parent"
+            android:scaleType="fitXY"/>
+    <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp" app:srcCompat="@drawable/orange_tab_background"
+            android:id="@+id/orange_tab_imageButton" app:layout_constraintBottom_toTopOf="@+id/guideline19"
+            app:layout_constraintTop_toTopOf="parent"
+            android:scaleType="fitXY" app:layout_constraintVertical_bias="1.0" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline24"/>
+    <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp" android:background="@drawable/blue_tab_background"
+            android:id="@+id/blue_tab_imageButton" app:layout_constraintBottom_toTopOf="@+id/guideline19"
+            app:layout_constraintStart_toStartOf="@+id/guideline22"
+            app:layout_constraintEnd_toStartOf="@+id/guideline23" app:layout_constraintTop_toTopOf="parent"
+    />
+    <android.support.constraint.Guideline android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                          android:id="@+id/guideline19"
+                                          android:orientation="horizontal"
+                                          app:layout_constraintGuide_percent="0.07"/>
+    <android.support.constraint.Guideline android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                          android:id="@+id/guideline22"
+                                          android:orientation="vertical"
+                                          app:layout_constraintGuide_percent="0.25"/>
+    <android.support.constraint.Guideline android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                          android:id="@+id/guideline23"
+                                          android:orientation="vertical"
+                                          app:layout_constraintGuide_percent="0.5"/>
+    <android.support.constraint.Guideline android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                          android:id="@+id/guideline24"
+                                          android:orientation="vertical"
+                                          app:layout_constraintGuide_percent="0.75"/>
+    <android.support.constraint.Guideline android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                          android:id="@+id/guideline25"
+                                          android:orientation="vertical"
+                                          app:layout_constraintGuide_percent="0.2"/>
 </android.support.constraint.ConstraintLayout>
