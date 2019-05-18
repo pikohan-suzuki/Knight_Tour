@@ -41,7 +41,7 @@ class ClearDialog(): DialogFragment() {
         val rankTextView =alertDialog.findViewById<TextView>(R.id.rank_clear_textView)
         rankTextView.text=getString(R.string.rank,rank)
         val timeTextView = alertDialog.findViewById<TextView>(R.id.clear_time_clear_textView)
-        timeTextView.text=SimpleDateFormat("mm:ss").format(time)
+        timeTextView.text="Time: "+SimpleDateFormat("mm:ss").format(time)
 
         val dialogBuilder = AlertDialog.Builder(activity)
         dialogBuilder.setView(alertDialog)
